@@ -1,8 +1,8 @@
 """
 To run with real mode:
-python run_exp.py --backend slora --suite a10g --breakdown  --mode real
+python run_exp.py --backend dm --suite a10g --breakdown  --mode real
 with synthetic mode:
-python run_exp.py --backend slora --suite a10g --breakdown  --mode synthetic
+python run_exp.py --backend dm --suite a10g --breakdown  --mode synthetic
 default to synthetic mode.
 """
 import argparse
@@ -21,7 +21,7 @@ import aiohttp
 from exp_suite import BenchmarkConfig, get_all_suites, to_dict, BASE_MODEL, LORA_DIR
 from trace import generate_requests, get_real_requests
 sys.path.append("../bench_lora")
-from slora.utils.metric import reward, attainment_func
+from dancingmodel.utils.metric import reward, attainment_func
 
 GB = 1024 ** 3
 
@@ -56,7 +56,7 @@ async def send_request(
     else:
         url = server + "/generate_stream"
     
-    if backend in ["slora"]:
+    if backend in ["dm"]:
         data = {
             'model_dir': model_dir,
             'lora_dir': adapter_dir,
@@ -155,7 +155,7 @@ def get_res_stats(per_req_latency, benchmark_time, backend, warmup_time=0, warmu
     per_req_latency = [i for i in per_req_latency if i[3] is not None]
     throughput = len(per_req_latency) / benchmark_time
     # print(per_req_latency)
-    # if backend == "slora":
+    # if backend == "dm":
     #     peak_mem = get_peak_mem(server)
     #     print(f"GPU peak memory (GB):", [[f"{x / GB:.2f}" for x in tpg] for tpg in peak_mem])
     print(f"Total time: {benchmark_time:.2f} s")
@@ -198,7 +198,7 @@ def get_res_stats(per_req_latency, benchmark_time, backend, warmup_time=0, warmu
     print(f"Average attainment: {avg_attainment:.2f}")
 
     # dump results
-    if backend == "slora":
+    if backend == "dm":
         # TODO
         # single_gpu_peak_mem = peak_mem
         single_gpu_peak_mem = 0
@@ -280,9 +280,9 @@ def run_exp(model_setting, backend, server, config, output, mode, seed=42, debug
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--backend", type=str, default="slora",
-                        choices=["slora", "vllm", "lightllm", "vllm-packed"])
-    parser.add_argument("--suite", type=str, default="default")
+    parser.add_argument("--backend", type=str, required=True,
+                        choices=["dm", "vllm", "lightllm", "vllm-packed"])
+    parser.add_argument("--suite", type=str, default="default", required=True)
 
     parser.add_argument("--model-setting", type=str, default="S1")
     parser.add_argument("--debug", action="store_true")

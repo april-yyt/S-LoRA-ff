@@ -16,11 +16,11 @@ BenchmarkConfig = namedtuple(
 
 breakdown_suite = {
     # "test": BenchmarkConfig(
-    #     num_adapters = [1],
+    #     num_adapters = [4],
     #     alpha = [1],
-    #     req_rate = [1],
+    #     req_rate = [4],
     #     cv = [1],
-    #     duration = [1],
+    #     duration = [4],
     #     input_range = [[8, 512]],
     #     output_range = [[95, 96]],
     # ),

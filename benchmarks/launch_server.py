@@ -8,15 +8,15 @@ from exp_suite import BASE_MODEL, LORA_DIR
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--device", type=str, default="debug")
-    parser.add_argument("--backend", type=str, default="slora",
-                        choices=["slora", "vllm", "lightllm", "vllm-packed"])
+    parser.add_argument("--device", type=str, required=True)
+    parser.add_argument("--backend", type=str, required=True,
+                        choices=["dm", "vllm", "lightllm", "vllm-packed"])
     parser.add_argument("--model-setting", type=str, default="S1")
 
     parser.add_argument("--num-adapter", type=int)
     parser.add_argument("--num-token", type=int)
+    parser.add_argument("--tp", type=int, default=1)
 
-    parser.add_argument("--dummy", action="store_true")
     parser.add_argument("--no-lora-compute", action="store_true")
     parser.add_argument("--prefetch", action="store_true")
     parser.add_argument("--no-mem-pool", action="store_true")
@@ -42,8 +42,8 @@ if __name__ == "__main__":
             args.num_token -= 64 * 4 * 18
     
 
-    if args.backend == "slora":
-        cmd = f"python -m slora.server.api_server --max_total_token_num {args.num_token}"
+    if args.backend == "dm":
+        cmd = f"python -m dancingmodel.server.api_server --max_total_token_num {args.num_token}"
         cmd += f" --model {base_model}"
         cmd += f" --tokenizer_mode auto"
 
@@ -52,8 +52,7 @@ if __name__ == "__main__":
             for adapter_dir in adapter_dirs:
                 cmd += f" --lora {adapter_dir}-{i}"
 
-        if args.dummy:
-            cmd += " --dummy"
+        cmd += " --dummy"
         cmd += " --swap"
         # cmd += " --scheduler pets"
         # cmd += " --profile"
@@ -67,6 +66,7 @@ if __name__ == "__main__":
             cmd += " --prefetch"
         if args.no_mem_pool:
             cmd += " --no-mem-pool"
+        cmd += f" --tp {args.tp}"
         # cmd += " --no-lora-copy"
         # cmd += " --no-kernel"
         if args.bmm:

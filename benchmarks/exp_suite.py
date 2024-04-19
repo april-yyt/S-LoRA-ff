@@ -6,17 +6,23 @@ BASE_MODEL = {
         "S2": "huggyllama/llama-7b",
         "S3": "huggyllama/llama-13b",
         "S4": "huggyllama/llama-13b",
-        "Real": "huggyllama/llama-7b",
+        "S5": "dummy-llama-30b-m",
+        "S6": "dummy-llama-70b-m",
+        "S7": "huggyllama/llama-30b",
 }
 
 LORA_DIR = {
-        "S1": ["dummy-lora-7b-rank-8"],
+        "S1": ["dummy-lora-7b-rank-16"],
         "S2": ["dummy-lora-7b-rank-64", "dummy-lora-7b-rank-32",
                "dummy-lora-7b-rank-16", "dummy-lora-7b-rank-8"],
         "S3": ["dummy-lora-13b-rank-16"],
         "S4": ["dummy-lora-13b-rank-64",
                "dummy-lora-13b-rank-32", "dummy-lora-13b-rank-16",],
-        "Real": ["tloen/alpaca-lora-7b", "MBZUAI/bactrian-x-llama-7b-lora"],
+        # only the rank matters 7b is a ghost, update MProphet instead
+#        "S5": ["dummy-lora-30b-rank-16", "dummy-lora-30b-rank-32"],
+        "S5": ["dummy-lora-7b-rank-16", "dummy-lora-7b-rank-32"],
+        "S6": ["dummy-lora-7b-rank-64"],
+        "S7": ["dummy-lora-30b-rank-64"], # rank-16
 }
 
 BenchmarkConfig = namedtuple(
@@ -258,22 +264,12 @@ breakdown_suite = {
 
 
 debug_suite = {
-    "default": BenchmarkConfig(
-        num_adapters = [100],
-        alpha = [1],
-        req_rate = [2],
-        cv = [1],
-        duration = [60],
-        input_range = [[8, 512]],
-        output_range = [[8, 512]],
-    ),
-
     "debug": BenchmarkConfig(
-        num_adapters = [20],
+        num_adapters = [10],
         alpha = [1],
-        req_rate = [4],
+        req_rate = [3],
         cv = [1],
-        duration = [60],
+        duration = [100],
         input_range = [[8, 512]],
         output_range = [[8, 512]],
     ),
@@ -288,12 +284,43 @@ debug_suite = {
         output_range = [[8, 512]],
     ),
 
+    "test-swap": BenchmarkConfig(
+        num_adapters = [5],
+        alpha = [1],
+        req_rate = [5],
+        cv = [1],
+        duration = [5 * 1],
+        input_range = [[8, 512]],
+        output_range = [[8, 512]],
+    ),
+
+    "test-30b": BenchmarkConfig(
+        num_adapters = [0,10],
+        alpha = [1],
+        req_rate = [10],
+        cv = [1],
+        duration = [1 * 1],
+        input_range = [[8, 512]],
+        output_range = [[8, 512]],
+    ),
+
+
     "swap": BenchmarkConfig(
         num_adapters = [500],
         alpha = [1],
         req_rate = [20],
         cv = [1],
         duration = [60 * 1],
+        input_range = [[8, 512]],
+        output_range = [[8, 512]],
+    ),
+
+    "test": BenchmarkConfig(
+        num_adapters = [10],
+        alpha = [1],
+        req_rate = [1],
+        cv = [1],
+        duration = [5 * 1],
         input_range = [[8, 512]],
         output_range = [[8, 512]],
     ),

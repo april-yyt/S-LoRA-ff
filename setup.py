@@ -27,21 +27,21 @@ remove_unwanted_pytorch_nvcc_flags()
 ext_modules = []
 ext_modules.append(
     torch_cpp_ext.CUDAExtension(
-        "slora._kernels",
-        ["slora/csrc/lora_ops.cc"] +
-        glob("slora/csrc/bgmv/*.cu"),
+        "dancingmodel._kernels",
+        ["dancingmodel/csrc/lora_ops.cc"] +
+        glob("dancingmodel/csrc/bgmv/*.cu"),
         extra_compile_args=['-std=c++17'],
     ))
 
 setup(
-    name="slora",
+    name="dancingmodel",
     version="1.0.0",
     packages=find_packages(
-        exclude=("build", "include", "csrc", "test", "dist", "docs", "benchmarks", "slora.egg-info")
+        exclude=("build", "include", "csrc", "test", "dist", "docs", "benchmarks", "dancingmodel.egg-info")
     ),
     author="model toolchain",
     author_email="",
-    description="slora for inference LLM",
+    description="dancingmodel for inference LLM",
     long_description="",
     long_description_content_type="text/markdown",
     url="",
@@ -63,8 +63,6 @@ setup(
         "transformers",
         "triton==2.1.0",
         "uvloop",
-        "uvicorn",
-        "psutil",
     ],
     ext_modules=ext_modules,
     cmdclass={"build_ext": torch_cpp_ext.BuildExtension},

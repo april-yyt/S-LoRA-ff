@@ -1,8 +1,8 @@
 """
 To run with real mode:
-python run_exp_peft.py --backend slora --suite a10g --breakdown  --mode real
+python run_exp_peft.py --backend dm --suite a10g --breakdown  --mode real
 with synthetic mode:
-python run_exp_peft.py --backend slora --suite a10g --breakdown  --mode synthetic
+python run_exp_peft.py --backend dm --suite a10g --breakdown  --mode synthetic
 default to synthetic mode.
 """
 import argparse
@@ -27,7 +27,7 @@ from exp_suite import BenchmarkConfig, get_all_suites, to_dict
 from trace import generate_requests, dummy_prompt, get_real_requests
 sys.path.append("../bench_lora")
 from exp_suite import BASE_MODEL, LORA_DIR
-from slora.utils.metric import reward, attainment_func
+from dancingmodel.utils.metric import reward, attainment_func
 from run_exp import get_adapter_dirs
 
 GB = 1024 ** 3
@@ -186,7 +186,7 @@ def benchmark(
 def get_res_stats(per_req_latency, benchmark_time, backend, warmup_time=0, warmup_num=0):
     # get throughput
     throughput = len(per_req_latency) / benchmark_time
-    # if backend == "slora":
+    # if backend == "dm":
     #     peak_mem = get_peak_mem(server)
     #     print(f"GPU peak memory (GB):", [[f"{x / GB:.2f}" for x in tpg] for tpg in peak_mem])
     print(f"Total time: {benchmark_time:.2f} s")
@@ -228,7 +228,7 @@ def get_res_stats(per_req_latency, benchmark_time, backend, warmup_time=0, warmu
     print(f"Average attainment: {avg_attainment:.2f}")
 
     # dump results
-    if backend == "slora":
+    if backend == "dm":
         # TODO
         # single_gpu_peak_mem = peak_mem
         single_gpu_peak_mem = 0

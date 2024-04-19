@@ -15,7 +15,7 @@ from exp_suite import BenchmarkConfig, get_all_suites, to_dict
 from trace import generate_requests
 sys.path.append("../bench_lora")
 from launch_server import base_model, adapter_dirs
-from slora.utils.metric import reward
+from dancingmodel.utils.metric import reward
 
 GB = 1024 ** 3
 

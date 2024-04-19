@@ -41,7 +41,7 @@ if __name__ == "__main__":
             # launch_cmd = f"python ../launch_server.py " \
             #              f" --device {args.device} " \
             #              f" --model-setting {setting} " \
-            #              f" --backend slora " \
+            #              f" --backend dm " \
             #              f" --num-adapter {num_adapter} " \
             #              f" --num-token {num_token} "
             # launch_cmd += option
@@ -50,7 +50,7 @@ if __name__ == "__main__":
             # launch_cmd = ["python", "../launch_server.py"]
             # launch_cmd += ["--device", f"{args.device}"]
             # launch_cmd += ["--model-setting", f"{setting}"]
-            # launch_cmd += ["--backend", "slora"]
+            # launch_cmd += ["--backend", "dm"]
             # launch_cmd += ["--num-adapter", f"{num_adapter}"]
             # launch_cmd += ["--num-token", f"{num_token}"]
             # if option != "":
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
             base_model = BASE_MODEL[setting]
             adapter_dirs = LORA_DIR[setting]
-            launch_cmd = ["python", "-m", "slora.server.api_server"]
+            launch_cmd = ["python", "-m", "dancingmodel.server.api_server"]
             launch_cmd += ["--max_total_token_num", f"{num_token}"]
             launch_cmd += ["--model", f"{base_model}"]
             launch_cmd += ["--tokenizer_mode", "auto"]
@@ -81,14 +81,14 @@ if __name__ == "__main__":
             else:
                 filename += f".jsonl"
             # run_cmd = f"python ../run_exp.py " \
-            #           f" --backend slora " \
+            #           f" --backend dm " \
             #           f" --suite ablation-no-mem " \
             #           f" --model-setting {setting} " \
             #           f" --mode synthetic " \
             #           f" --output {filename} "
             # os.system(run_cmd)
             run_cmd = ["python", "../run_exp.py"]
-            run_cmd += ["--backend", "slora"]
+            run_cmd += ["--backend", "dm"]
             run_cmd += ["--suite", "ablation-no-mem"]
             run_cmd += ["--model-setting", f"{setting}"]
             run_cmd += ["--mode", "synthetic"]
